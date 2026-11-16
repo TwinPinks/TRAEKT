@@ -1,11 +1,10 @@
 # TRAEKT
 
-**TWIN PINKS TRAEKT** is a spatial waveform generator for VCV Rack.
-Two independently moving points travel along a generated three-dimensional
-trajectory. Their X, Y and Z coordinates become six output voltages.
-
-The same module runs at modulation rates (LFO) or at audio rates. Rotation
-turns the trajectory; Spatial Fold reshapes it.
+**TWIN PINKS TRAEKT** is a spatial waveform generator for VCV Rack. Two
+independently moving points travel along a generated three-dimensional
+trajectory, and their X, Y and Z coordinates become six output voltages. Each
+point has its own frequency: one can be an LFO while the other runs at audio
+rate. Rotation turns the trajectory; Spatial Fold reshapes it.
 
 ## Ports
 
@@ -19,9 +18,6 @@ The upper row of sockets is point 1, the lower row point 2.
 | **X** | X-coordinate output |
 | **Y** | Y-coordinate output |
 | **Z** | Z-coordinate output, or a combination of X and Y selected in Third Wave |
-
-The FREQ input and FM modulation are separate. FREQ provides exponential pitch
-control. The MOD input provides linear through-zero FM when FM is selected.
 
 Output level and waveform depend on the figure, its orientation, Fold and
 modulation, so neither is fixed from shape to shape. The Normalization setting
@@ -91,6 +87,10 @@ becomes the waveform. The point keeps looping after a reset.
 Patch a signal into the MOD input of the point being modulated, select its MOD
 type and raise DEPTH. At 0% the input has no effect.
 
+The points are not internally connected to each other’s MOD inputs. To make one
+modulate the other, patch a cable; both directions at once are fine. Any other
+CV or audio source works the same way.
+
 The depth figures below assume a modulation signal of **±5 V**.
 
 | Type | Behaviour |
@@ -103,10 +103,6 @@ The depth figures below assume a modulation signal of **±5 V**.
 Through-zero FM can slow a point to a stop and reverse its direction without
 resetting its position. This is independent of through-zero Fold, which inverts
 the geometry rather than the direction of travel.
-
-The points are not internally connected to each other’s MOD inputs. To make one
-modulate the other, patch a cable; both directions at once are fine. Any other
-CV or audio source works the same way.
 
 Ring modulation can reduce the output level as DEPTH increases. Nothing
 compensates for that automatically: Normalization is measured on the
@@ -166,10 +162,11 @@ quickly, the mean still drifts.
 Normalization brings X, Y and Z to the same peak no matter how far the figure
 reaches along each axis. Only the level changes; the waveform and its harmonics
 stay as they are. An axis the figure barely moves along is raised to full scale
-too, which is why this is a choice rather than the default. AM and RING can only
-pull the level down, so ±5 V remains the ceiling as long as the MOD input stays
-within ±5 V. The CMP, AND and XOR settings of Third Wave already produce fixed
-±5 V levels and are left alone.
+too, which is why this is a choice rather than the default.
+
+Two things stay outside it. AM and RING can only pull the level down, so ±5 V
+remains the ceiling as long as the MOD input stays within ±5 V. The CMP, AND and
+XOR settings of Third Wave already produce fixed ±5 V levels and are left alone.
 
 ### Third Wave
 
@@ -189,9 +186,9 @@ This setting affects both Z output sockets. X and Y remain unchanged.
 ## Patches and presets
 
 Rack patches and module presets save the figure’s algorithm and seed, the field
-values, the orientation and the menu options. That is enough to
-rebuild the same figure — there is no separate waveform file to keep track of.
-Where the two points happen to be along the trajectory is not saved.
+values, the orientation and the menu options. That is enough to rebuild the same
+figure — there is no separate waveform file to keep track of. Where the two
+points happen to be along the trajectory is not saved.
 
 ---
 
