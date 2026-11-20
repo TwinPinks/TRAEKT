@@ -20,8 +20,8 @@ The upper row of sockets is point 1, the lower row point 2.
 | **Z** | Z-coordinate output, or a combination of X and Y selected in Third Wave |
 
 Output level and waveform depend on the figure, its orientation, Fold and
-modulation, so neither is fixed from shape to shape. The Normalization setting
-in the menu holds the level at ±5 V instead.
+modulation, so neither is fixed from shape to shape. Normalization, on by
+default, holds the level at ±5 V.
 
 ## Controls
 
@@ -45,10 +45,11 @@ The corresponding fields at the top and bottom of the screen are also clickable.
 |---|---|---|
 | **FREQ** | 0.01–10240 Hz | Laps around the trajectory per second; defaults: point 1 = 0.60 Hz, point 2 = 0.04 Hz |
 | **POS** | 0–99% | Position on the trajectory to which TRIG returns the point; defaults: 0% and 50% |
-| **MOD** | FOLD / FM / AM / RING | Selects the destination of that point’s MOD input |
+| **MOD** | FOLD / FM / AM / RM / PM | Selects the destination of that point’s MOD input |
 | **DEPTH** | 0–100% | Sets the modulation amount; default: 0% |
 
-Hold **Shift** while adjusting FREQ for finer increments. When selecting a MOD
+As with other Rack knobs, hold **Cmd** (Ctrl on Windows/Linux) while adjusting FREQ
+for finer increments; hold **Shift** to turn the encoder faster. When selecting a MOD
 type with the encoder, turn through the selection interval until the next type
 appears; the selection deliberately changes more slowly than other fields.
 
@@ -63,6 +64,11 @@ waveforms change together because their source geometry changes.
 
 The base Fold setting is shared, but each point adds its own modulation on top
 of it, so at any moment the two points can be folded by different amounts.
+
+Modulation can take Fold below ×1: the geometry contracts to zero and continues
+into a centrally inverted form, where a negative value folds by the same amount
+with the coordinates inverted through the centre. Modulated Fold has a protective
+limit of **−12 to +12**, separate from the base control’s ×1–×5 range.
 
 **ROTATE** ranges from **×0 to ×20**, with ×1 as the default. A new module starts
 with rotation running. This is a rotation speed multiplier, not an oscillator
@@ -95,16 +101,17 @@ The depth figures below assume a modulation signal of **±5 V**.
 
 | Type | Behaviour |
 |---|---|
-| **FOLD** | Adds modulation to Fold. At 100% depth, ±5 V adds ±4 to the base amount. The lower limit depends on the Fold modulation menu setting. |
+| **FOLD** | Adds modulation to Fold; the result can pass through zero. |
 | **FM** | Linear through-zero frequency modulation. At 100% depth, ±5 V produces a deviation of ±4 times the point’s base frequency. |
 | **AM** | Crossfades from the unmodulated signal to multiplication by a unipolar version of the MOD signal. |
-| **RING** | Crossfades from the unmodulated signal to multiplication by the bipolar MOD signal. At full depth, negative modulation reverses output polarity. |
+| **RM** | Ring modulation. Crossfades from the unmodulated signal to multiplication by the bipolar MOD signal. At full depth, negative modulation reverses output polarity. |
+| **PM** | Phase modulation. The MOD signal shifts the point's position along the figure instead of its speed. |
 
 Through-zero FM can slow a point to a stop and reverse its direction without
 resetting its position. This is independent of through-zero Fold, which inverts
 the geometry rather than the direction of travel.
 
-Ring modulation can reduce the output level as DEPTH increases. Nothing
+RM can reduce the output level as DEPTH increases. Nothing
 compensates for that automatically: Normalization is measured on the
 unmodulated signal, not on the modulated result.
 
@@ -132,28 +139,16 @@ refresh rate.
 * **Closed Spline** — smooth paths through generated control points.
 * **Chaos Capture** — a captured section of chaotic motion formed into a closed path.
 
-Selecting an algorithm generates a figure. Changing a figure while listening may
-cause a discontinuity.
-
-### Fold modulation
-
-* **Limit (floor ×1)** — default. Modulation cannot reduce Fold below ×1.
-* **Through zero** — modulation can reduce Fold below ×1, contract the geometry
-  to zero and continue into a centrally inverted form.
-
-In Through zero mode, a negative Fold value uses the same folding magnitude as
-the corresponding positive value, with the coordinates inverted through the
-centre. Modulated Fold has a protective limit of **−12 to +12**; this is separate
-from the base control’s ×1–×5 range. In Limit mode the lower boundary is ×1.
+Selecting an algorithm sets which generator NEW SHAPE will use.
 
 ### Output
 
 * **Off (raw projection)** — keeps the raw projected coordinates, DC offset and
   all.
-* **Centering (no DC offset)** — default. Subtracts each output’s mean so it
-  sits around zero.
-* **Normalization (±5 V per axis)** — centres each output and scales it to a
-  ±5 V peak.
+* **Centering (no DC offset)** — subtracts each output’s mean so it sits around
+  zero.
+* **Normalization (±5 V per axis)** — default. Centres each output and scales it
+  to a ±5 V peak.
 
 Centering matters when an output drives an audio-rate modulator, where a DC
 component biases the destination. It is not exact: while Fold or rotation move
@@ -161,10 +156,9 @@ quickly, the mean still drifts.
 
 Normalization brings X, Y and Z to the same peak no matter how far the figure
 reaches along each axis. Only the level changes; the waveform and its harmonics
-stay as they are. An axis the figure barely moves along is raised to full scale
-too, which is why this is a choice rather than the default.
+stay as they are.
 
-Two things stay outside it. AM and RING can only pull the level down, so ±5 V
+Two things stay outside it. AM and RM can only pull the level down, so ±5 V
 remains the ceiling as long as the MOD input stays within ±5 V. The CMP, AND and
 XOR settings of Third Wave already produce fixed ±5 V levels and are left alone.
 
